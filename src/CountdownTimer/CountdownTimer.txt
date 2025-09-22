@@ -1,0 +1,103 @@
+// import React, { useEffect, useState } from "react";
+
+// export default function CountdownTimer() {
+//   // Set your future date (example: Dec 31, 2025, 23:59:59)
+//   const targetDate = new Date("2025-12-31T23:59:59");
+//   const targetTime = targetDate.getTime();
+
+//   const [timeLeft, setTimeLeft] = useState(targetTime - Date.now());
+
+//   useEffect(() => {
+//     const timer = setInterval(() => {
+//       const diff = targetTime - Date.now();
+//       setTimeLeft(diff > 0 ? diff : 0);
+//     }, 1000);
+
+//     return () => clearInterval(timer);
+//   }, [targetTime]);
+
+//   // Convert milliseconds into days, hours, minutes, seconds
+//   const formatTime = (ms) => {
+//     const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+//     const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+//     const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+
+//     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+//   };
+
+//   return (
+//     <div style={{ textAlign: "center", margin: "20px" }}>
+//       <h1>⏳ Countdown Timer</h1>
+//       {/* Show target date */}
+//       <h3>
+//         Target Date:{" "}
+//         {targetDate.toLocaleString("en-US", {
+//           weekday: "long",
+//           year: "numeric",
+//           month: "long",
+//           day: "numeric",
+//           hour: "2-digit",
+//           minute: "2-digit",
+//           second: "2-digit",
+//         })}
+//       </h3>
+
+//       {timeLeft > 0 ? (
+//         <h2>{formatTime(timeLeft)}</h2>
+//       ) : (
+//         <h2>🎉 Countdown Finished!</h2>
+//       )}
+//     </div>
+//   );
+// }
+import React, { useEffect, useState } from "react";
+
+export default function CountdownTimer() {
+  // Set your future date (example: Dec 31, 2025, 23:59:59)
+  const targetDate = new Date("2025-12-31T23:59:59");
+  const targetTime = targetDate.getTime();
+
+  const [timeLeft, setTimeLeft] = useState(targetTime - Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const diff = targetTime - Date.now();
+      setTimeLeft(diff > 0 ? diff : 0);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [targetTime]);
+
+  // Convert milliseconds into days, hours, minutes, seconds
+  const formatTime = (ms) => {
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  };
+
+  // Format target date as DD-MM-YYYY
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // +1 since months are 0-based
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  return (
+    <div style={{ textAlign: "center", margin: "20px" }}>
+      <h1>⏳ Countdown Timer</h1>
+      {/* Show target date in DD-MM-YYYY */}
+      <h3>Target Date: {formatDate(targetDate)}</h3>
+
+      {timeLeft > 0 ? (
+        <h2>{formatTime(timeLeft)}</h2>
+      ) : (
+        <h2>🎉 Countdown Finished!</h2>
+      )}
+    </div>
+  );
+}

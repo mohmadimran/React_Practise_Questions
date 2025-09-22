@@ -1,0 +1,96 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+
+export default function App() {
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState("");
+  const [editPostId, setEditPostId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  // ✅ READ (Fetch posts from API)
+  useEffect(() => {
+    axios.get(API_URL + "?_limit=5") // only 5 items
+      .then(res => setPosts(res.data))
+      .catch(err => console.error(err));
+  }, []);
+
+  // ✅ CREATE (Add new post)
+  const addPost = () => {
+    if (!newPost.trim()) return;
+
+    const post = { title: newPost, body: "Sample body", userId: 1 };
+
+    axios.post(API_URL, post)
+      .then(res => {
+        setPosts([res.data, ...posts]);
+        setNewPost("");
+      })
+      .catch(err => console.error(err));
+  };
+
+  // ✅ UPDATE (Edit post)
+  const updatePost = (id) => {
+    axios.put(`${API_URL}/${id}`, { ...posts.find(p => p.id === id), title: editText })
+      .then(res => {
+        setPosts(posts.map(post => post.id === id ? res.data : post));
+        setEditPostId(null);
+        setEditText("");
+      })
+      .catch(err => console.error(err));
+  };
+
+  // ✅ DELETE (Remove post)
+  const deletePost = (id) => {
+    axios.delete(`${API_URL}/${id}`)
+      .then(() => setPosts(posts.filter(post => post.id !== id)))
+      .catch(err => console.error(err));
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>React CRUD with Mock API</h1>
+
+      {/* CREATE */}
+      <div>
+        <input
+          type="text"
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+          placeholder="Enter new post"
+        />
+        <button onClick={addPost}>Add</button>
+      </div>
+
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id} style={{ margin: "10px 0" }}>
+            {editPostId === post.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  style={{
+                    border: 'none',
+                    outline: 'none' // Removes focus outline
+                  }}
+                />
+                <button onClick={() => updatePost(post.id)}>Save</button>
+              </>
+            ) : (
+              <>
+                <span>{post.title}</span>
+                <button onClick={() => { setEditPostId(post.id); setEditText(post.title); }}>
+                  Edit
+                </button>
+                <button onClick={() => deletePost(post.id)}>Delete</button>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

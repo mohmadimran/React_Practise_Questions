@@ -1,0 +1,20 @@
+import React, { useState } from "react";
+import Modal from "./Modal";
+import "./style.css"; // ensure CSS imported somewhere (Modal imports it too)
+
+export default function App() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ padding: 24, fontFamily: "Arial, sans-serif" }}>
+      <h1>Modal / Dialog demo</h1>
+      <button onClick={() => setOpen(true)} style={{ padding: "8px 12px" }}>
+        Open Modal
+      </button>
+
+      <Modal open={open} onClose={() => setOpen(false)} title="Dialog Title">
+        <p>This is a demo modal. Click outside, press Esc or use the Close button to dismiss.</p>
+        <p>Put forms or any UI here.</p>
+      </Modal>
+    </div>
+  );
+}

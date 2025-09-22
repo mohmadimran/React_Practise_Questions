@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from "react";
+
+export default function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [newTask, setNewTask] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Fetch mock todos from JSONPlaceholder (first 5 todos only)
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos?_limit=5")
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching todos:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  // Add new todo
+  const addTodo = () => {
+    if (!newTask.trim()) return;
+
+    const newTodo = {
+      id: Date.now(), // temporary unique id
+      title: newTask,
+      completed: false,
+    };
+
+    setTodos([newTodo, ...todos]);
+    setNewTask("");
+  };
+
+  // Toggle todo completion
+  const toggleTodo = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  // Delete todo
+  const deleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  if (loading) return <h3>Loading todos...</h3>;
+
+  return (
+    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
+      <h2>✅ Todo App</h2>
+
+      {/* Input to add new task */}
+      <div style={{ marginBottom: "15px" }}>
+        <input
+          type="text"
+          value={newTask}
+          placeholder="Enter a new task"
+          onChange={(e) => setNewTask(e.target.value)}
+          style={{ padding: "8px", width: "70%" }}
+        />
+        <button onClick={addTodo} style={{ marginLeft: "8px", padding: "8px" }}>
+          Add
+        </button>
+      </div>
+
+      {/* Todo List */}
+      <ul style={{ listStyle: "none", padding: 0 }}>
+        {todos.map((todo) => (
+          <li
+            key={todo.id}
+            style={{
+              margin: "10px 0",
+              padding: "10px",
+              background: "#f4f4f4",
+              borderRadius: "8px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span
+              onClick={() => toggleTodo(todo.id)}
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+                cursor: "pointer",
+                flex: 1,
+              }}
+            >
+              {todo.title}
+            </span>
+            <button
+              onClick={() => deleteTodo(todo.id)}
+              style={{ marginLeft: "10px", color: "white", background: "red", border: "none", padding: "5px 8px", borderRadius: "4px" }}
+            >
+              ❌
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

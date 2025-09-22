@@ -1,0 +1,113 @@
+import { useState } from "react";
+
+export default function Accordion() {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const faqs = [
+    { question: "What is React?", answer: "React is a JavaScript library for building user interfaces." },
+    { question: "What is an Accordion?", answer: "An accordion is a UI component that shows or hides content when you click a header." },
+    { question: "Can I open multiple items?", answer: "In this version, only one panel can be open at a time." },
+  ];
+
+  const toggleAccordion = (index) => {
+    setActiveIndex(activeIndex === index ? null : index); // close if already open
+  };
+
+  return (
+    <div style={{ maxWidth: "500px", margin: "20px auto", fontFamily: "Arial" }}>
+      <h2>FAQ Section</h2>
+      {faqs.map((faq, index) => (
+        <div key={index} style={{ border: "1px solid #ccc", marginBottom: "10px", borderRadius: "5px" }}>
+          <button
+            onClick={() => toggleAccordion(index)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              padding: "10px",
+              fontSize: "16px",
+              fontWeight: "bold",
+              cursor: "pointer",
+              background: activeIndex === index ? "#f0f0f0" : "#fff",
+              border: "none",
+              outline: "none"
+            }}
+          >
+            {faq.question}
+          </button>
+          {activeIndex === index && (
+            <div style={{ padding: "10px", background: "#fafafa" }}>
+              <p>{faq.answer}</p>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+
+// // create react componet, for Q Accordion / FAQ Component
+// // Build an accordion where only one panel opens at a time.
+
+// import React, { useState } from 'react';
+// import './style.css'; // We'll create this next
+
+// const FAQAccordion = () => {
+//   const [activeIndex, setActiveIndex] = useState(null);
+
+//   const faqData = [
+//     {
+//       question: "What is React?",
+//       answer: "React is a JavaScript library for building user interfaces, particularly single-page applications where data changes over time."
+//     },
+//     {
+//       question: "How do I install React?",
+//       answer: "You can install React using Create React App by running: npx create-react-app my-app"
+//     },
+//     {
+//       question: "What are React hooks?",
+//       answer: "Hooks are functions that let you use state and other React features without writing a class. Examples include useState, useEffect, and useContext."
+//     },
+//     {
+//       question: "Is React a framework?",
+//       answer: "No, React is a library for building user interfaces. It's often referred to as a framework but technically it's a library that focuses on the view layer."
+//     },
+//     {
+//       question: "What is JSX?",
+//       answer: "JSX is a syntax extension for JavaScript that looks similar to HTML. It allows you to write HTML-like code in your JavaScript files."
+//     }
+//   ];
+
+//   const handleAccordionClick = (index) => {
+//     // If the clicked item is already active, close it. Otherwise, open the clicked one.
+//     setActiveIndex(activeIndex === index ? null : index);
+//   };
+
+//   return (
+//     <div className="faq-accordion">
+//       <h2>Frequently Asked Questions</h2>
+//       {faqData.map((item, index) => (
+//         <div key={index} className="accordion-item">
+//           <button
+//             className={`accordion-header ${activeIndex === index ? 'active' : ''}`}
+//             onClick={() => handleAccordionClick(index)}
+//             aria-expanded={activeIndex === index}
+//           >
+//             <span>{item.question}</span>
+//             <span className="accordion-icon">
+//               {activeIndex === index ? '−' : '+'}
+//             </span>
+//           </button>
+//           <div
+//             className={`accordion-content ${activeIndex === index ? 'active' : ''}`}
+//             aria-hidden={activeIndex !== index}
+//           >
+//             <p>{item.answer}</p>
+//           </div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default FAQAccordion;

@@ -1,0 +1,180 @@
+
+import { useState } from "react";
+
+export default function AddressDropdown() {
+  // Sample data
+  const data = {
+    India: {
+      Maharashtra: ["Mumbai", "Pune", "Nagpur"],
+      Gujarat: ["Ahmedabad", "Surat", "Vadodara"],
+    },
+    USA: {
+      California: ["Los Angeles", "San Francisco", "San Diego"],
+      Texas: ["Houston", "Dallas", "Austin"],
+    },
+    Canada: {
+      Ontario: ["Toronto", "Ottawa", "Hamilton"],
+      Quebec: ["Montreal", "Quebec City", "Laval"],
+    },
+  };
+
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+
+  return (
+    <div style={{ width: "300px", margin: "20px auto", fontFamily: "Arial" }}>
+      <h3>User Address</h3>
+
+      {/* Country Dropdown */}
+      <select
+        value={country}
+        onChange={(e) => {
+          setCountry(e.target.value);
+          setState(""); // reset state when country changes
+          setCity("");  // reset city when country changes
+        }}
+        style={{ width: "100%", marginBottom: "10px", padding: "6px" }}
+      >
+        <option value="">Select Country</option>
+        {Object.keys(data).map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </select>
+
+      {/* State Dropdown */}
+      <select
+        value={state}
+        onChange={(e) => {
+          setState(e.target.value);
+          setCity(""); // reset city when state changes
+        }}
+        disabled={!country}
+        style={{ width: "100%", marginBottom: "10px", padding: "6px" }}
+      >
+        <option value="">Select State</option>
+        {country &&
+          Object.keys(data[country]).map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+      </select>
+
+      {/* City Dropdown */}
+      <select
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+        disabled={!state}
+        style={{ width: "100%", marginBottom: "10px", padding: "6px" }}
+      >
+        <option value="">Select City</option>
+        {state &&
+          data[country][state].map((ct) => (
+            <option key={ct} value={ct}>
+              {ct}
+            </option>
+          ))}
+      </select>
+
+      {/* Final Result */}
+      {country && state && city && (
+        <p>
+          <strong>Selected Address:</strong> {city}, {state}, {country}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ..........................................................................................................................
+// import { useState } from "react";
+
+// export default function MultiSelectDropdown() {
+//   const options = ["Apple", "Banana", "Cherry", "Grapes", "Mango", "Orange"];
+
+//   const [selected, setSelected] = useState([]);
+//   const [search, setSearch] = useState("");
+//   const [open, setOpen] = useState(false);
+
+//   // Toggle option selection
+//   const handleSelect = (option) => {
+//     if (selected.includes(option)) {
+//       setSelected(selected.filter((item) => item !== option));
+//     } else {
+//       setSelected([...selected, option]);
+//     }
+//   };
+
+//   // Filter options based on search
+//   const filteredOptions = options.filter((opt) =>
+//     opt.toLowerCase().includes(search.toLowerCase())
+//   );
+
+//   return (
+//     <div style={{ width: "250px", margin: "20px auto", fontFamily: "Arial" }}>
+//       {/* Dropdown input box */}
+//       <div
+//         onClick={() => setOpen(!open)}
+//         style={{
+//           border: "1px solid #ccc",
+//           padding: "8px",
+//           borderRadius: "5px",
+//           cursor: "pointer",
+//           background: "#fff",
+//         }}
+//       >
+//         {selected.length > 0 ? selected.join(", ") : "Select options"}
+//       </div>
+
+//       {/* Dropdown menu */}
+//       {open && (
+//         <div
+//           style={{
+//             border: "1px solid #ccc",
+//             borderRadius: "5px",
+//             marginTop: "5px",
+//             background: "#fff",
+//             maxHeight: "150px",
+//             overflowY: "auto",
+//             padding: "8px",
+//           }}
+//         >
+//           {/* Search box inside dropdown */}
+//           <input
+//             type="text"
+//             placeholder="Search..."
+//             value={search}
+//             onChange={(e) => setSearch(e.target.value)}
+//             style={{
+//               width: "100%",
+//               marginBottom: "8px",
+//               padding: "5px",
+//               border: "1px solid #ccc",
+//               borderRadius: "4px",
+//             }}
+//           />
+
+//           {/* List of options with checkboxes */}
+//           {filteredOptions.map((option) => (
+//             <label key={option} style={{ display: "block" }}>
+//               <input
+//                 type="checkbox"
+//                 checked={selected.includes(option)}
+//                 onChange={() => handleSelect(option)}
+//               />
+//               {option}
+//             </label>
+//           ))}
+
+//           {/* No results */}
+//           {filteredOptions.length === 0 && (
+//             <p style={{ fontSize: "12px", color: "gray" }}>No options found</p>
+//           )}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }

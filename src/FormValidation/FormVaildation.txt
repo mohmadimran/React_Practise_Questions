@@ -1,0 +1,191 @@
+import React, { useState } from "react";
+import "./Style.css";
+
+export default function SimpleForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [errors, setErrors] = useState({});
+  const [submittedData, setSubmittedData] = useState(null);
+
+  const validate = () => {
+    const newErrors = {};
+
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      newErrors.email = "Email is required";
+    } else if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail)) {
+      newErrors.email = "Invalid email format";
+    }
+
+
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    if (!confirm) {
+      newErrors.confirm = "Please confirm your password";
+    } else if (confirm !== password) {
+      newErrors.confirm = "Passwords do not match";
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      setSubmittedData({ email, password }); // save submitted values
+      setEmail("");
+      setPassword("");
+      setConfirm("");
+    }
+  };
+
+  return (
+    <div className="simple-form">
+      <h2>Registration Form</h2>
+      <form onSubmit={handleSubmit} noValidate>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {errors.email && <p className="error">{errors.email}</p>}
+        </div>
+
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {errors.password && <p className="error">{errors.password}</p>}
+        </div>
+
+        <div>
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+          />
+          {errors.confirm && <p className="error">{errors.confirm}</p>}
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+
+      {submittedData && (
+        <div className="success">
+          <h3>Submitted Data:</h3>
+          <p><strong>Email:</strong> {submittedData.email}</p>
+          <p><strong>Password:</strong> {submittedData.password}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// import React, { useState } from "react";
+// import "./Style.css"; // optional css
+
+// export default function SimpleForm() {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [confirm, setConfirm] = useState("");
+//   const [errors, setErrors] = useState({});
+//   const [submitted, setSubmitted] = useState(false);
+
+//   const validate = () => {
+//     const newErrors = {};
+
+//     // Email validation
+//     if (!email) {
+//       newErrors.email = "Email is required";
+//     } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+//       newErrors.email = "Invalid email format";
+//     }
+
+//     // Password validation
+//     if (!password) {
+//       newErrors.password = "Password is required";
+//     } else if (password.length < 8) {
+//       newErrors.password = "Password must be at least 8 characters";
+//     }
+
+//     // Confirm password validation
+//     if (!confirm) {
+//       newErrors.confirm = "Please confirm your password";
+//     } else if (confirm !== password) {
+//       newErrors.confirm = "Passwords do not match";
+//     }
+
+//     return newErrors;
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     const validationErrors = validate();
+//     setErrors(validationErrors);
+
+//     if (Object.keys(validationErrors).length === 0) {
+//       setSubmitted(true);
+//       // reset form
+//       setEmail("");
+//       setPassword("");
+//       setConfirm("");
+//     }
+//   };
+
+//   return (
+//     <div className="simple-form">
+//       <h2>Registration Form</h2>
+//       <form onSubmit={handleSubmit} noValidate>
+//         <div>
+//           <label>Email:</label>
+//           <input
+//             type="email"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//           />
+//           {errors.email && <p className="error">{errors.email}</p>}
+//         </div>
+
+//         <div>
+//           <label>Password:</label>
+//           <input
+//             type="password"
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//           />
+//           {errors.password && <p className="error">{errors.password}</p>}
+//         </div>
+
+//         <div>
+//           <label>Confirm Password:</label>
+//           <input
+//             type="password"
+//             value={confirm}
+//             onChange={(e) => setConfirm(e.target.value)}
+//           />
+//           {errors.confirm && <p className="error">{errors.confirm}</p>}
+//         </div>
+
+//         <button type="submit">Register</button>
+//       </form>
+
+//       {submitted && <p className="success">Form submitted successfully!</p>}
+//     </div>
+//   );
+// }

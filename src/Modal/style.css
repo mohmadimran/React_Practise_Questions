@@ -1,0 +1,97 @@
+/* Modal.css - simple, clear styles and animations */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.6); /* dark backdrop */
+  z-index: 1000;
+  /* fade in */
+  animation: overlayFadeIn 220ms ease-out;
+}
+
+/* modal box */
+.modal-dialog {
+  width: 90%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 30px 60px rgba(2, 6, 23, 0.4);
+  transform: translateY(10px);
+  opacity: 0;
+  animation: dialogRise 260ms cubic-bezier(.2,.9,.3,1) forwards;
+  overflow: hidden;
+  outline: none;
+}
+
+/* animations */
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dialogRise {
+  from { transform: translateY(10px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef2f7;
+}
+.modal-title {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px;
+  color: #475569;
+}
+.modal-close:hover {
+  color: #0f172a;
+}
+
+/* body */
+.modal-body {
+  padding: 16px;
+  color: #334155;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #eef2f7;
+}
+.modal-action {
+  padding: 8px 12px;
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.modal-action:hover { opacity: 0.95; }
+
+/* small screens */
+@media (max-width: 420px) {
+  .modal-dialog {
+    width: 94%;
+    margin: 10px;
+  }
+}

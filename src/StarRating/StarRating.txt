@@ -1,0 +1,61 @@
+import { useState } from "react";
+
+export default function StarRating() {
+  const [rating, setRating] = useState(0);   // selected value
+  const [hover, setHover] = useState(0);     // hover value
+  const totalStars = 5;
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Star Rating Example</h2>
+      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        {[...Array(totalStars)].map((_, index) => {
+          const starValue = index + 1;
+          return (
+            <span
+              key={index}
+              onClick={() => setRating(starValue)}
+              onMouseEnter={() => setHover(starValue)}
+              onMouseLeave={() => setHover(0)}
+              style={{
+                fontSize: "2rem",
+                color: starValue <= (hover || rating) ? "gold" : "lightgray",
+                cursor: "pointer",
+                transition: "color 0.2s",
+              }}
+            >
+              ★
+            </span>
+          );
+        })}
+        <span style={{ marginLeft: "10px" }}>
+          {rating ? `You rated: ${rating}/${totalStars}` : "No rating yet"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// import { useState } from "react";
+
+// export default function HoverExample() {
+//   const [hovered, setHovered] = useState(false);
+
+//   return (
+//     <div>
+//       <button
+//         onMouseEnter={() => setHovered(true)}
+//         onMouseLeave={() => setHovered(false)}
+//         style={{
+//           backgroundColor: hovered ? "lightgreen" : "lightgray",
+//           padding: "10px 20px",
+//           fontSize: "16px",
+//           cursor: "pointer"
+//         }}
+//       >
+//         Hover Me
+//       </button>
+//       <p>{hovered ? "You are hovering over the button!" : "Not hovering"}</p>
+//     </div>
+//   );
+// }
