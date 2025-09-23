@@ -1,0 +1,123 @@
+import React, { useState } from "react";
+
+// Sample Questions
+const questions = [
+  {
+    question: "What is the capital of France?",
+    options: ["Paris", "London", "Berlin", "Madrid"],
+    answer: "Paris",
+  },
+  {
+    question: "Which language runs in a web browser?",
+    options: ["Python", "C++", "Java", "JavaScript"],
+    answer: "JavaScript",
+  },
+  {
+    question: "What does CSS stand for?",
+    options: [
+      "Central Style Sheets",
+      "Cascading Style Sheets",
+      "Cascading Simple Sheets",
+      "Cars SUVs Sailboats",
+    ],
+    answer: "Cascading Style Sheets",
+  },
+];
+
+// Quiz App Component
+export default function QuizApp() {
+  const [current, setCurrent] = useState(0);
+  const [score, setScore] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const handleAnswer = (option) => {
+    setSelected(option);
+  };
+
+  const handleNext = () => {
+    if (selected === questions[current].answer) {
+      setScore((s) => s + 1); // functional update (safer)
+    }
+    setSelected(null);
+
+    if (current + 1 < questions.length) {
+      setCurrent((c) => c + 1);
+    } else {
+      setIsFinished(true);
+    }
+  };
+
+  const restartQuiz = () => {
+    setCurrent(0);
+    setScore(0);
+    setSelected(null);
+    setIsFinished(false);
+  };
+
+  return (
+    <div className="quiz-app" style={{ textAlign: "center", padding: "20px" }}>
+      <h2>Quiz App</h2>
+
+      {!isFinished ? 
+      (
+        <div>
+          <h3>
+            Question {current + 1} of {questions.length}
+          </h3>
+          <p>{questions[current].question}</p>
+
+          {/* Radio Options */}
+          <div style={{ textAlign: "left", display: "inline-block" }}>
+            {questions[current].options.map((option, idx) => (
+              <label
+                key={idx}
+                style={{
+                  display: "block",
+                  margin: "8px 0",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="radio"
+                  name={`question-${current}`} // unique per question
+                  value={option}
+                  checked={selected === option}
+                  onChange={() => handleAnswer(option)}
+                  style={{ marginRight: "8px" }}
+                />
+                {option}
+              </label>
+            ))}
+          </div>
+
+          <br />
+
+          <button
+            onClick={handleNext}
+            disabled={!selected}
+            style={{
+              marginTop: "15px",
+              padding: "10px 20px",
+              cursor: selected ? "pointer" : "not-allowed",
+            }}
+          >
+            {current === questions.length - 1 ? "Finish" : "Next"}
+          </button>
+        </div>
+      ) : (
+        <div>
+          <h3>
+            🎉 Quiz Finished! You scored {score} out of {questions.length}
+          </h3>
+          <button
+            onClick={restartQuiz}
+            style={{ padding: "10px 20px", marginTop: "15px" }}
+          >
+            Restart Quiz
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

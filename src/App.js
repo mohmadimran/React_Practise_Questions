@@ -18,6 +18,7 @@ import Modal from "./Modal/Index"
 import StarRating from "./StarRating/StarRating"
 import ParentThemeComponet from "./useContexWithToggleTheme/ParentComponet"
 import MultiSelectDropdown from "./MultiDropDownMenu/MultiDropDownMenu"
+import QuizApp from "./Queiz app/QueizApp"
 function App() {
   return (
     <>
@@ -40,7 +41,8 @@ function App() {
       {/* <Modal/> */}
       {/* <StarRating/> */}
       {/* <ParentThemeComponet/> */}
-      <MultiSelectDropdown/>
+      {/* <MultiSelectDropdown/> */}
+      <QuizApp/>
     </>
   );
 }
