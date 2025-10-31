@@ -19,6 +19,8 @@ import StarRating from "./StarRating/StarRating"
 import ParentThemeComponet from "./useContexWithToggleTheme/ParentComponet"
 import MultiSelectDropdown from "./MultiDropDownMenu/MultiDropDownMenu"
 import QuizApp from "./Queiz app/QueizApp"
+import VertualizationList from "./Vertualization/VertualizationList"
+import Carousal from "./Carousal/Carousal"
 function App() {
   return (
     <>
@@ -42,7 +44,9 @@ function App() {
       {/* <StarRating/> */}
       {/* <ParentThemeComponet/> */}
       {/* <MultiSelectDropdown/> */}
-      <QuizApp/>
+      {/* <QuizApp/> */}
+      {/* <VertualizationList/> */}
+      <Carousal/>
     </>
   );
 }
