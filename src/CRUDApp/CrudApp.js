@@ -10,50 +10,66 @@ export default function CrudApp() {
     const [editId, setEditId] = useState(null)
     const [editData, setEditData] = useState("")
 
-    // read the data
     useEffect(() => {
-        const getResponse = async () => {
-            try {
-                const response = await axios(url);
-                const jsonData = response.data;
-                console.log(jsonData)
-                setData(jsonData)
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        getResponse()
-    }, [])
-
-    const handleCreatData = () => {
-        if (!input.trim()) return;
-        axios.post(url, { title: input, id: Date.now() }).then((val) => {
-            setData([val.data, ...data])
-
-        }).catch((error) => console.log(error));
-        setInput("")
+  const getResponse = async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setData(jsonData);
+    } catch (error) {
+      console.log(error);
     }
+  };
+  getResponse();
+}, []);
 
-    const handleDelete = (id) => {
-        axios.delete(`${url}/${id}`).then((val) => {
-            const filterData = data.filter((item) => item.id !== id)
-            setData(filterData)
-        }).catch((error) => console.log(error))
-    }
+const handleCreateData = async () => {
+  if (!input.trim()) return;
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: input, id: Date.now() }),
+    });
+    if (!response.ok) throw new Error("Failed to create data");
+    const newData = await response.json();
+    setData([newData, ...data]);
+  } catch (error) {
+    console.log(error);
+  }
+  setInput("");
+};
 
-    const handleEdit = async(id) => {
-     try{
-        const response = await axios.put(`${url}/${id}`,{...data.find((item)=>item.id === id), title:editData});
-        setData(data.map((item)=> item.id === id ? response.data : item))
-        setEditData("");
-        setEditId(null)
-     }
-     catch(erorr){
-        console.log(erorr)
-     }
-    }
+const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`${url}/${id}`, { method: "DELETE" });
+    if (!response.ok) throw new Error("Failed to delete data");
+    const filterData = data.filter((item) => item.id !== id);
+    setData(filterData);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-
+const handleEdit = async (id) => {
+  try {
+    const itemToEdit = data.find((item) => item.id === id);
+    const response = await fetch(`${url}/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...itemToEdit, title: editData }),
+    });
+    if (!response.ok) throw new Error("Failed to update data");
+    const updatedItem = await response.json();
+    setData(data.map((item) => (item.id === id ? updatedItem : item)));
+    setEditData("");
+    setEditId(null);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     return (
         <div>
