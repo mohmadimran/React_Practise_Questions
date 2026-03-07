@@ -42,7 +42,6 @@ export default function FaqAccordion() {
 //     return (
 //         <>
 
-//             <button></button>
 //             <div>{
 //                 faqs.map((list, index) => (
 //                     <div key={index}>
