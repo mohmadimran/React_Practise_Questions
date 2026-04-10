@@ -102,3 +102,160 @@ export default function SimpleCarousel() {
     </div>
   );
 }
+
+
+      {/* another answer for with smuth carousal */}
+
+import React, { useState, useEffect } from "react";
+
+const images = [
+  "https://picsum.photos/id/1018/800/400",
+  "https://picsum.photos/id/1015/800/400",
+  "https://picsum.photos/id/1019/800/400",
+  "https://picsum.photos/id/1016/800/400",
+  "https://picsum.photos/id/1020/800/400",
+];
+
+export default function InfiniteCarousel() {
+  // 🔹 Clone first & last images
+  const extendedImages = [
+    images[images.length - 1],
+    ...images,
+    images[0],
+  ];
+
+  const [current, setCurrent] = useState(1); // start from real first slide
+  const [transition, setTransition] = useState(true);
+
+  // 🔹 Auto Slide
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => prev + 1);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  // 🔹 Handle Infinite Loop Jump
+  const handleTransitionEnd = () => {
+    // If at fake last slide → jump to real first
+    if (current === extendedImages.length - 1) {
+      setTransition(false);
+      setCurrent(1);
+    }
+
+    // If at fake first slide → jump to real last
+    if (current === 0) {
+      setTransition(false);
+      setCurrent(extendedImages.length - 2);
+    }
+  };
+
+  // 🔹 Re-enable transition after jump
+  useEffect(() => {
+    if (!transition) {
+      requestAnimationFrame(() => {
+        setTransition(true);
+      });
+    }
+  }, [transition]);
+
+  // 🔹 Navigation
+  const nextSlide = () => setCurrent((prev) => prev + 1);
+  const prevSlide = () => setCurrent((prev) => prev - 1);
+
+  return (
+    <div
+      style={{
+        width: "800px",
+        margin: "20px auto",
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "8px",
+      }}
+    >
+      {/* Slides */}
+      <div
+        onTransitionEnd={handleTransitionEnd}
+        style={{
+          display: "flex",
+          transition: transition ? "transform 0.5s ease" : "none",
+          transform: `translateX(-${current * 100}%)`,
+        }}
+      >
+        {extendedImages.map((img, idx) => (
+          <img
+            key={idx}
+            src={img}
+            alt={`slide-${idx}`}
+            style={{ width: "100%", flexShrink: 0 }}
+          />
+        ))}
+      </div>
+
+      {/* Arrows */}
+      <button
+        onClick={prevSlide}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "10px",
+          transform: "translateY(-50%)",
+          background: "rgba(0,0,0,0.5)",
+          color: "white",
+          border: "none",
+          padding: "10px",
+          cursor: "pointer",
+        }}
+      >
+        ◀
+      </button>
+
+      <button
+        onClick={nextSlide}
+        style={{
+          position: "absolute",
+          top: "50%",
+          right: "10px",
+          transform: "translateY(-50%)",
+          background: "rgba(0,0,0,0.5)",
+          color: "white",
+          border: "none",
+          padding: "10px",
+          cursor: "pointer",
+        }}
+      >
+        ▶
+      </button>
+
+      {/* Dots */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "10px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          gap: "8px",
+        }}
+      >
+        {images.map((_, idx) => (
+          <span
+            key={idx}
+            onClick={() => setCurrent(idx + 1)} // adjust index because of clones
+            style={{
+              width: "10px",
+              height: "10px",
+              borderRadius: "50%",
+              background:
+                current === idx + 1 ? "white" : "gray",
+              cursor: "pointer",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
