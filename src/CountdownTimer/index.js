@@ -31,14 +31,26 @@ export default function CountdownTimer() {
   }, [targetTime]);
 
   // Convert ms → days, hours, minutes, seconds
-  const formatTime = (ms) => {
-    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+  // const formatTime = (ms) => {
+  //   const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  //   const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  //   const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((ms % (1000 * 60)) / 1000);
 
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-  };
+  //   return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  // };
+   function formatTime(ms) {        
+        const S = 1000;
+        const M = 60 * S;
+        const H = 60 * M;
+        const D = 24 * H;
+
+        const days = Math.floor(ms / D);
+        const hours = Math.floor((ms % D) / H);
+        const minutes = Math.floor((ms % H) / M);
+        const seconds = Math.floor((ms % M) / S);
+        return `${days}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}s`;
+    }
 
   // Format target date → DD-MM-YYYY
   const formatDate = (date) => {
