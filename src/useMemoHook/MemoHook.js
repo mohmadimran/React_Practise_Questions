@@ -40,3 +40,51 @@ function UserListWithMemo() {
 }
 
 export default UserListWithMemo;
+
+
+// one another example
+
+import { useState, useMemo } from 'react';
+
+function Demo() {
+  const [num1, setNum1] = useState(5);
+  const [num2, setNum2] = useState(3);
+  const [unrelated, setUnrelated] = useState(0);
+  
+  // EXPENSIVE calculation (pretend it takes 1 second)
+  const expensiveProduct = useMemo(() => {
+    console.log("🔴 RUNNING EXPENSIVE MULTIPLICATION...");
+    let result = 0;
+    for (let i = 0; i < 100000000; i++) {
+      result = num1 * num2; // Simulating hard work
+    }
+    return result;
+  }, [num1, num2]); // Only depends on num1 and num2
+  
+  console.log("Component rendering");
+  
+  return (
+    <div>
+      <h3>Expensive Result: {expensiveProduct}</h3>
+      
+      <div>
+        <button onClick={() => setNum1(num1 + 1)}>
+          Change num1: {num1}
+        </button>
+        <button onClick={() => setNum2(num2 + 1)}>
+          Change num2: {num2}
+        </button>
+      </div>
+      
+      <div>
+        <button onClick={() => setUnrelated(unrelated + 1)}>
+          Unrelated Click: {unrelated}
+        </button>
+        <p style={{color: 'green'}}>
+          ✅ Clicking "Unrelated" button does NOT trigger recalculation!
+          Check the console - no "RUNNING EXPENSIVE MULTIPLICATION" message.
+        </p>
+      </div>
+    </div>
+  );
+}
