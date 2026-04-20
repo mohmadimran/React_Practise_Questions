@@ -6,7 +6,7 @@ export default function SimpleForm() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState({});
-  const [submittedData, setSubmittedData] = useState(null);
+  const [submittedData, setSubmittedData] = useState({});
 
   const validate = () => {
     const newErrors = {};
